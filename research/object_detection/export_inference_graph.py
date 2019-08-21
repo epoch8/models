@@ -134,6 +134,8 @@ flags.DEFINE_string('config_override', '',
                     'text proto to override pipeline_config_path.')
 flags.DEFINE_boolean('write_inference_graph', False,
                      'If true, writes inference graph to disk.')
+flags.DEFINE_boolean('write_raw_outputs', True,
+                     'If true, adds raw_ outputs to inference graph.')
 tf.app.flags.mark_flag_as_required('pipeline_config_path')
 tf.app.flags.mark_flag_as_required('trained_checkpoint_prefix')
 tf.app.flags.mark_flag_as_required('output_directory')

@@ -31,6 +31,9 @@ slim = tf.contrib.slim
 
 freeze_graph_with_def_protos = freeze_graph.freeze_graph_with_def_protos
 
+flags = tf.app.flags
+FLAGS = flags.FLAGS
+
 
 def rewrite_nn_resize_op(is_quantized=False):
   """Replaces a custom nearest-neighbor resize op with the Tensorflow version.
@@ -244,12 +247,15 @@ def add_output_tensor_nodes(postprocessed_tensors,
       classes, name=detection_fields.detection_classes)
   outputs[detection_fields.num_detections] = tf.identity(
       num_detections, name=detection_fields.num_detections)
-  if raw_boxes is not None:
-    outputs[detection_fields.raw_detection_boxes] = tf.identity(
-        raw_boxes, name=detection_fields.raw_detection_boxes)
-  if raw_scores is not None:
-    outputs[detection_fields.raw_detection_scores] = tf.identity(
-        raw_scores, name=detection_fields.raw_detection_scores)
+
+  if FLAGS.write_raw_outputs:
+    if raw_boxes is not None:
+      outputs[detection_fields.raw_detection_boxes] = tf.identity(
+          raw_boxes, name=detection_fields.raw_detection_boxes)
+    if raw_scores is not None:
+      outputs[detection_fields.raw_detection_scores] = tf.identity(
+          raw_scores, name=detection_fields.raw_detection_scores)
+
   if keypoints is not None:
     outputs[detection_fields.detection_keypoints] = tf.identity(
         keypoints, name=detection_fields.detection_keypoints)
